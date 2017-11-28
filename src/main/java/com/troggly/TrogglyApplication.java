@@ -9,4 +9,5 @@ public class TrogglyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TrogglyApplication.class, args);
 	}
+	//comment 1
 }
