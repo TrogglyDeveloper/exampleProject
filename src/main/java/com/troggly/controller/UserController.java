@@ -1,6 +1,7 @@
 package com.troggly.controller;
 
 import com.troggly.apiObject.AddUserApi;
+import com.troggly.apiObject.MainReply;
 import com.troggly.apiObject.UserApi;
 import com.troggly.apiObject.UserList;
 import com.troggly.enums.Role;
@@ -50,6 +51,10 @@ public class UserController {
         UserList userList = new UserList();
         try { //TODO bissnes logic
             //validation если уже занят логин
+
+            if(addUserApi.userDetails.id==null){
+                addUserApi.userDetails.id = addUserApi.login+"_details";
+            }
             UserApi userApi = new UserApi();
             userApi.type = addUserApi.type;
             userApi.roles = addUserApi.roles;
@@ -142,6 +147,20 @@ public class UserController {
         }
 
         return userList;
+    }
+
+    @RequestMapping(path="/user/del/{login}",  method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public MainReply delUser(@PathVariable String login ){
+        MainReply mainReply = null;
+        try{
+            userService.delete(login);
+            mainReply = new MainReply();
+        }catch (Exception e){
+            mainReply = new MainReply();
+            mainReply.returnedCode = -1;
+            mainReply.errorMessage = e.getMessage();
+        }
+        return mainReply;
     }
 
 }
