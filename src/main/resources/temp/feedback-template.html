@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Order Confirmation</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous"/>
+
+</head>
+<body>
+<div>
+
+
+    <div class="card" style="width: 20rem;">
+        <!--<img class="card-img-top" src="test.jpg"  th:src="@{test.jpg}" alt="Card image cap"/>-->
+        <div class="card-body">
+            <h4 class="card-title">Card title</h4>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+
+    <img src="http://arhivach.org/storage3/t/c74cb7f1526dab582de539fa4ab00150.png"/>
+    <h1 th:text="${title}">title</h1>
+    <p th:text="${description}">
+        description
+    </p>
+
+
+</div>
+
+</body>
+</html>
