@@ -10,4 +10,5 @@ public class TrogglyApplication {
 		SpringApplication.run(TrogglyApplication.class, args);
 	}
 	//com 2
+	//comment 1
 }
