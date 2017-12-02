@@ -1,8 +1,8 @@
 package com.troggly.model;
 
-import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.*;
@@ -16,9 +16,11 @@ public class Portfolio implements Serializable {
     private static final long serialVersionUID = 1879289878797407954L;
 
     @Id
-    @Column(name = "partfolio_id")
+    @Column(name = "portfolio_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+
     @NotNull
     private Date date;
 

@@ -135,7 +135,8 @@ public class PortfolioController {
             @RequestParam("file") MultipartFile[] files, @RequestParam("fullName") String fullName,
             @RequestParam("description") String description, @RequestParam("projectReference") String projectReference,
             @RequestParam("technology") String technology, @RequestParam("developmentTime") String developmentTime,
-            @RequestParam("projectType") String projectType,@RequestParam("date") String stringDate) {
+            @RequestParam("projectType") String projectType,@RequestParam("date") String stringDate,
+            @RequestParam("mainImage") MultipartFile mainImage) {
 
         try{
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd");
@@ -148,7 +149,8 @@ public class PortfolioController {
             Set<Image> setList = new HashSet<>(imageList);
             Portfolio portfolio = new Portfolio();
             portfolio.setImages(setList);
-            portfolio.setMainImage(imageList.get(0));//TODO mainImage
+            Image myMainImage = fileService.saveFileWithReturnImage(mainImage);
+            portfolio.setMainImage(myMainImage);//TODO mainImage
             portfolio.setTechnology(technology);
             portfolio.setProjectReference(projectReference);
             portfolio.setFullName(fullName);

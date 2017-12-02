@@ -71,4 +71,29 @@ public class FileService {
 
         return imageList;
     }
+
+
+
+    public Image saveFileWithReturnImage(MultipartFile file) throws IOException {//TODO files logic validate
+     Image rezulImage = null;
+        Image image = null;
+        int i = 0;
+        try{
+            if (file.isEmpty()) {
+                    logger.error("!I"+i);
+                    return null;
+                }
+                byte[] bytes = file.getBytes();
+                Path path = Paths.get(env.getProperty("directory") + "\\"+file.getOriginalFilename());
+                Files.write(path, bytes);
+                image  = new Image();
+                image.setName(file.getOriginalFilename());
+                image.setDate(new Date());
+                image.setLink(env.getProperty("prefix") + file.getOriginalFilename());// TODO server logic
+                rezulImage = image;
+                logger.error("dir "+env.getProperty("directory"));
+            }catch (Exception e){e.printStackTrace();}
+
+        return rezulImage;
+    }
 }
