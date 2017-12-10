@@ -1,14 +1,13 @@
 package com.troggly.bootstrap;
 
-import com.troggly.apiObject.UserApi;
-import com.troggly.apiObject.UserDetailsApi;
 import com.troggly.enums.Role;
 import com.troggly.enums.Type;
 import com.troggly.mapper.UserMapper;
 import com.troggly.model.*;
 import com.troggly.repository.*;
-import com.troggly.service.EmailHtmlSender;
+import com.troggly.service.ConfirmEmailHashesService;
 import com.troggly.service.EmailService;
+import com.troggly.service.EmailTemplateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -49,7 +48,10 @@ public class BootstrapDefaultValue  implements InitializingBean {
     private EmailService emailService;
 
     @Autowired
-    private EmailHtmlSender emailHtmlSender;
+    private ConfirmEmailHashesService confirmEmailHashesService;
+
+    @Autowired
+    private EmailTemplateService emailTemplateService;
 
 
     @Transactional()
@@ -57,14 +59,6 @@ public class BootstrapDefaultValue  implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         createSystemUsers();
         createSimplePortfolio();
-       // test();
-   //     emailService.sendSimpleMessage("sistimas001@gmail.com","ololo","trololo");
-//        emailService.send();
-        Context context = new Context();
-        context.setVariable("title", env.getProperty("fora"));
-        context.setVariable("description", env.getProperty("sora"));
-
-        emailHtmlSender.send(null, "Title of email", "templates/email/feedback-template.html", context);
     }
 
     private void createSystemUsers(){
@@ -85,11 +79,34 @@ public class BootstrapDefaultValue  implements InitializingBean {
         userDetails.setFirstName("Vladyslav");
         userDetails.setAddress("Chernihiv");
         userDetails.setId(user.getLogin()+"_details");
-
+//        UserEmail userEmail = new UserEmail("lool@sad.asd",false);
+        UserEmail userEmail = new UserEmail();
+        userEmail.setEmail("admin@adm.in");
+        userEmail.setConfirm(new Boolean(false));
+        UserEmail userEmail1 = new UserEmail();
+        userEmail1.setEmail("admin1@adm.in");
+        userEmail1.setConfirm(new Boolean(true));
+        Set<UserEmail> userEmailSet =  new HashSet<UserEmail>();
+        userEmailSet.add(userEmail);
+        userEmailSet.add(userEmail1);
+//        userDetails.setUserEmails(userEmailList);
+        userDetails.setEmails(userEmailSet);
         user.setUserDetails(userDetails);
        // userDetailsRepository.save(userDetails);
         userRepository.save(user);
         logger.info("Added default users");
+//        user = null;
+//        user = userRepository.findOne("admin");
+//        logger.info(user.toString());
+//        ConfirmEmailHashes confirmEmailHashes = new ConfirmEmailHashes();
+//        for(UserEmail email:user.getUserDetails().getEmails()){
+//            if(email.isConfirm()==false)
+//        confirmEmailHashes.setEmail(email);
+//        }
+//        confirmEmailHashes.setUser(user);
+//        confirmEmailHashes.setHash("trololo625616841");
+//
+//        confirmEmailHashesService.save(confirmEmailHashes);
 
 //        UserApi userApi = new UserApi();
 //        userApi.login = "admin";
@@ -107,7 +124,9 @@ public class BootstrapDefaultValue  implements InitializingBean {
 //        userRepository.save(user);
 
     }
+    private void createTestHash(){
 
+    }
    private void createSimplePortfolio(){
 //        Image image1 = new Image();
 //        image1.setDate(new Date());
@@ -191,38 +210,4 @@ public class BootstrapDefaultValue  implements InitializingBean {
      //   portfolioRepository.save(portfolio);
     }
 
-//     public void test(){
-////         Phone phone1 = new Phone();
-////         Phone phone2 = new Phone();
-////         Employee employee = new Employee();
-////         List<Phone> list = new ArrayList<>();
-////         list.add(phone1);
-////         list.add(phone2);
-////         employee.setPhones(list);
-////         employeeRepository.save(employee);
-//
-//
-//         // save a couple of categories
-//         BookCategory categoryA = new BookCategory("Category A");
-//         Set bookAs = new HashSet<Book>(){{
-//             add(new Book("Book A1", categoryA));
-//             add(new Book("Book A2", categoryA));
-//             add(new Book("Book A3", categoryA));
-//         }};
-//         categoryA.setBooks(bookAs);
-//
-//         BookCategory categoryB = new BookCategory("Category B");
-//         Set bookBs = new HashSet<Book>(){{
-//             add(new Book("Book B1", categoryB));
-//             add(new Book("Book B2", categoryB));
-//             add(new Book("Book B3", categoryB));
-//         }};
-//         categoryB.setBooks(bookBs);
-//         bookCategoryRepository.save(categoryA);
-////         bookCategoryRepository.save(new HashSet<BookCategory>() {{
-////             add(categoryA);
-////             add(categoryB);
-////         }});
-//
-//     }
 }

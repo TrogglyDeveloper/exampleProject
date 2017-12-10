@@ -2,10 +2,15 @@ package com.troggly.mapper;
 
 import com.troggly.apiObject.UserDetailsApi;
 import com.troggly.model.UserDetails;
+import com.troggly.model.UserEmail;
 import com.troggly.repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Vlad on 26.07.2017.
@@ -25,7 +30,13 @@ public class UserDetailsMapper {
             userDetailsApi.middleName = userDetails.getMiddleName();
             userDetailsApi.secondName = userDetails.getSecondName();
             userDetailsApi.address = userDetails.getAddress();
-            userDetailsApi.emails = userDetails.getEmails();
+//            Set<UserEmailApi> userEmailApiSet = new HashSet<>();
+            List<String> emailList = new ArrayList<>();
+            for(UserEmail mail : userDetails.getEmails()){
+                emailList.add(mail.getEmail());
+            }
+            userDetailsApi.emails = emailList;
+          //  userDetailsApi.emails = userDetails.getEmails();//TODO EMAILS GET
             userDetailsApi.skype_array = userDetails.getSkype_array();
             userDetailsApi.telephones = userDetails.getTelephones();
             userDetailsApi.country = userDetails.getCountry();
@@ -51,7 +62,18 @@ public class UserDetailsMapper {
             userDetails.setFirstName(userDetailsApi.firstName);
             userDetails.setMiddleName(userDetailsApi.middleName);
             userDetails.setSecondName(userDetailsApi.secondName);
-            userDetails.setEmails(userDetailsApi.emails);
+            Set<UserEmail> userEmailsSet = new HashSet<>();
+            UserEmail mailBuffer = null;
+            for(String userEmail : userDetailsApi.emails){
+                mailBuffer = new UserEmail();
+                mailBuffer.setEmail(userEmail);
+                mailBuffer.setConfirm(false);
+                userEmailsSet.add(mailBuffer);
+            }
+            userDetails.setEmails(userEmailsSet);
+          //  UserEmailApi userEmailApi = new UserEmailApi();
+
+           // userDetails.setEmails(userDetailsApi.emails); // TODO EMAILS SET
             userDetails.setSkype_array(userDetailsApi.skype_array);
             userDetails.setTelephones(userDetailsApi.telephones);
             userDetails.setCompany(userDetailsApi.company);

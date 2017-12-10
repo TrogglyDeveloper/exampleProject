@@ -50,7 +50,7 @@ public class User implements Serializable {
    // @PrimaryKeyJoinColumn
     @JoinColumn(name = "id")
     private UserDetails userDetails;
-
+//TODO change table name
 
     public User() {
     }

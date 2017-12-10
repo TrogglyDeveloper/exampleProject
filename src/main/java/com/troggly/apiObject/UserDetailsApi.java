@@ -1,8 +1,10 @@
 package com.troggly.apiObject;
 
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Vlad on 26.07.2017.

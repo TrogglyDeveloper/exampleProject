@@ -1,10 +1,13 @@
 package com.troggly.model;
 
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Vlad on 10.05.2017.
@@ -41,10 +44,16 @@ public class UserDetails implements Serializable {
     @Column(name = "address")
     private String address;
 
-    @ElementCollection(targetClass = String.class)
-    @CollectionTable(name = "emails")
-    @Column(name = "email")
-    private List<String> emails;
+//    @ElementCollection(targetClass = String.class)
+//    @CollectionTable(name = "emails")
+//    @Column(name = "email")
+//    private List<String> emails;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    private Set<UserEmail> emails = new HashSet<>();
 
     @ElementCollection(targetClass = String.class)
     @CollectionTable(name = "telephones")
@@ -77,7 +86,7 @@ public class UserDetails implements Serializable {
         this.secondName = secondName;
         this.middleName = middleName;
         this.address = address;
-        this.emails = emails;
+//        this.emails = emails;
         this.telephones = telephones;
         this.skype_array = skype_array;
     }
@@ -87,7 +96,7 @@ public class UserDetails implements Serializable {
         this.firstName = firstName;
         this.secondName = secondName;
         this.address = address;
-        this.emails = emails;
+//        this.emails = emails;
         this.telephones = telephones;
         this.skype_array = skype_array;
     }
@@ -131,12 +140,21 @@ public class UserDetails implements Serializable {
     public void setAddress(String address) {
         this.address = address;
     }
+//
+//    public List<String> getEmails() {
+//        return emails;
+//    }
+//
+//    public void setEmails(List<String> emails) {
+//        this.emails = emails;
+//    }
 
-    public List<String> getEmails() {
+
+    public Set<UserEmail> getEmails() {
         return emails;
     }
 
-    public void setEmails(List<String> emails) {
+    public void setEmails(Set<UserEmail> emails) {
         this.emails = emails;
     }
 
@@ -197,7 +215,7 @@ public class UserDetails implements Serializable {
                 ", secondName='" + secondName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", address='" + address + '\'' +
-                ", emails=" + emails +
+//                ", emails=" + emails +
                 ", telephones=" + telephones +
                 ", skype_array=" + skype_array +
                 ", additionalInformation='" + additionalInformation + '\'' +
@@ -205,5 +223,44 @@ public class UserDetails implements Serializable {
                 ", country='" + country + '\'' +
                 ", company='" + company + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserDetails that = (UserDetails) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+        if (secondName != null ? !secondName.equals(that.secondName) : that.secondName != null) return false;
+        if (middleName != null ? !middleName.equals(that.middleName) : that.middleName != null) return false;
+        if (address != null ? !address.equals(that.address) : that.address != null) return false;
+        if (emails != null ? !emails.equals(that.emails) : that.emails != null) return false;
+        if (telephones != null ? !telephones.equals(that.telephones) : that.telephones != null) return false;
+        if (skype_array != null ? !skype_array.equals(that.skype_array) : that.skype_array != null) return false;
+        if (additionalInformation != null ? !additionalInformation.equals(that.additionalInformation) : that.additionalInformation != null)
+            return false;
+        if (zipCode != null ? !zipCode.equals(that.zipCode) : that.zipCode != null) return false;
+        if (country != null ? !country.equals(that.country) : that.country != null) return false;
+        return company != null ? company.equals(that.company) : that.company == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (secondName != null ? secondName.hashCode() : 0);
+        result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (emails != null ? emails.hashCode() : 0);
+        result = 31 * result + (telephones != null ? telephones.hashCode() : 0);
+        result = 31 * result + (skype_array != null ? skype_array.hashCode() : 0);
+        result = 31 * result + (additionalInformation != null ? additionalInformation.hashCode() : 0);
+        result = 31 * result + (zipCode != null ? zipCode.hashCode() : 0);
+        result = 31 * result + (country != null ? country.hashCode() : 0);
+        result = 31 * result + (company != null ? company.hashCode() : 0);
+        return result;
     }
 }

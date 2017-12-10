@@ -6,6 +6,7 @@ import com.troggly.model.Image;
 import com.troggly.model.Portfolio;
 import com.troggly.service.FileService;
 import com.troggly.service.PortfolioService;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -214,4 +216,11 @@ public class PortfolioController {
 //        }
 //}
 
+
+//    @GetMapping(value = "/image")
+//    public @ResponseBody byte[] getImage() throws IOException {
+//        InputStream in = getClass()
+//                .getResourceAsStream("/com/baeldung/produceimage/image.jpg");
+//        return IOUtils.toByteArray(in);
+//    }
 }

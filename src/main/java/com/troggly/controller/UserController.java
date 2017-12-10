@@ -7,20 +7,24 @@ import com.troggly.apiObject.UserList;
 import com.troggly.enums.Role;
 import com.troggly.enums.Type;
 import com.troggly.mapper.UserMapper;
+import com.troggly.model.ConfirmEmailHashes;
 import com.troggly.model.User;
 import com.troggly.model.UserDetails;
+import com.troggly.model.UserEmail;
+import com.troggly.repository.UserDetailsRepository;
 import com.troggly.repository.UserRepository;
+import com.troggly.service.ConfirmEmailHashesService;
 import com.troggly.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Vlad on 26.07.2017.
@@ -34,6 +38,14 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @Autowired
+    private ConfirmEmailHashesService confirmEmailHashesService;
+
+    @Autowired
+    private UserDetailsRepository userDetailsRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping(path = "/user/findByLogin/{login}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -43,7 +55,31 @@ public class UserController {
         // logger.info("ASs"+userService.findOne(login).toString());
         UserApi userApi = userMapper.fromInternal(userService.findOne(login));
 
+//        if(userApi==null){
+//            return new UserApi().
+//        }
         return userApi;
+    }
+
+    @RequestMapping(path = "/user/checkLogin/{login}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public MainReply checkLoginUser(@PathVariable String login) {
+        MainReply mainReply = null;
+        try{
+        if(userService.findOne(login)!=null){
+            mainReply = new MainReply();
+            mainReply.errorMessage = "User with such login already exists";
+            mainReply.returnedCode = -2;
+            return mainReply;
+        }else {
+            mainReply = new MainReply();
+            return mainReply;
+        }
+        }catch (Exception e){
+            mainReply = new MainReply();
+            mainReply.errorMessage = "It's problem login";
+            mainReply.returnedCode = -1;
+            return mainReply;
+        }
     }
 
     @RequestMapping(path = "/user/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -99,6 +135,30 @@ public class UserController {
             User newUser = userService.save(user);
             userList.users.add(userMapper.fromInternal(newUser));
             logger.info("Registration new User " + newUser.toString());
+
+                    ConfirmEmailHashes confirmEmailHashes = null;
+        for(UserEmail email:newUser.getUserDetails().getEmails()){
+            if(email.isConfirm()==false){
+                confirmEmailHashes = new ConfirmEmailHashes();
+        confirmEmailHashes.setEmail(email);
+        confirmEmailHashes.setUser(newUser);
+        String hash =  BCrypt.hashpw(""+addUserApi.password+addUserApi.login, BCrypt.gensalt(rounds));
+                hash =  hash.replace('/','|');
+                hash =  hash.replace('\\','|');
+        confirmEmailHashes.setHash(hash);
+        logger.info("hash for test:"+confirmEmailHashes.getHash());
+        confirmEmailHashesService.save(confirmEmailHashes);
+            }
+        }
+
+        confirmEmailHashesService.sendConfirmEmail(newUser);
+//
+//            //TODO it's worked
+//            Context context = new Context();
+//            context.setVariable("name", userApi.userDetails.firstName);
+//           // context.setVariable("description", env.getProperty("sora"));
+//
+//            emailHtmlSender.send(null, "Title of email", "templates/email/registration-template.html", context);
 
 //            User user = new User();
 //            user.setPasswordHash("$2a$06$ptSH.gR7OB6tmo2yzX8.Cu1khpWmkGHSu/pGfCcRrV0NxO13H.WqG");//12345
@@ -161,6 +221,60 @@ public class UserController {
             mainReply.errorMessage = e.getMessage();
         }
         return mainReply;
+    }
+
+    @RequestMapping(path = "/user/confirmEmail", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public MainReply confirmEmail( @RequestParam("hash") String hash) {
+        MainReply mainReply = null;
+        try{
+//            ConfirmEmailHashes confirmEmailHashes = confirmEmailHashesService.findConfirmEmailHashesByHash(hash);
+//            if(confirmEmailHashes!=null){
+//                User user = confirmEmailHashes.getUser();
+//                UserEmail userEmail = confirmEmailHashes.getEmail();
+//                Set<UserEmail> userEmailSet = new HashSet<>();
+//                UserDetails userDetails = userDetailsRepository.findOne(user.getUserDetails().getId());
+//                logger.info("USER DET"+userDetails.getId());
+//                for(UserEmail email : userDetails.getEmails()){
+//                    if(userEmail.getId().equals(email.getId())){
+//                      //  user.getUserDetails().getEmails().remove(email);
+//                       email.setConfirm(true);
+//                       userEmailSet.add(email);
+//                     //   user.getUserDetails().getEmails().add(email);
+//                    }else{
+//                        userEmailSet.add(email);
+//                    }
+//                }
+//                userDetails.setEmails(userEmailSet);
+//              //   user.getUserDetails().setEmails(userEmailSet);
+//              //  userService.save(user);
+//                userDetailsRepository.save(userDetails);
+//                confirmEmailHashesService.delete(confirmEmailHashes.getId());
+//
+//              //  User user = userService.f
+//               // userEmail.setConfirm(true);
+//            }
+                confirmEmailHashesService.confirmEmail(hash);
+                mainReply = new MainReply();
+                return mainReply;
+
+
+            //TODO SEND MAIL WELCOME PAGE
+//            if(userService.findOne(login)!=null){
+//                mainReply = new MainReply();
+//                mainReply.errorMessage = "User with such login already exists";
+//                mainReply.returnedCode = -2;
+//                return mainReply;
+//            }else {
+//                mainReply = new MainReply();
+//                return mainReply;
+//            }
+        }catch (Exception e){
+            e.printStackTrace();
+            mainReply = new MainReply();
+            mainReply.errorMessage = e.getMessage();
+            mainReply.returnedCode = -1;
+            return mainReply;
+        }
     }
 
 }

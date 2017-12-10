@@ -9,6 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.mail.internet.MimeMessage;
 import java.io.File;
@@ -17,7 +19,11 @@ import java.io.File;
 public class EmailService {
 
 
+    @Autowired
+    private EmailService emailService;
 
+    @Autowired
+    private TemplateEngine templateEngine;
 
     private JavaMailSender javaMailSender;
 
@@ -27,17 +33,17 @@ public class EmailService {
     }
 
 
-    public void send(){
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo("sistimas001@gmail.com");
-        simpleMailMessage.setFrom("web.studio.eternity@gmail.com");
-        simpleMailMessage.setSubject("subject");
-        simpleMailMessage.setText("Text");
+//    public void send(){
+//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//        simpleMailMessage.setTo("sistimas001@gmail.com");
+//        simpleMailMessage.setFrom("web.studio.eternity@gmail.com");
+//        simpleMailMessage.setSubject("subject");
+//        simpleMailMessage.setText("Text");
+//
+//        javaMailSender.send(simpleMailMessage);
+//    }
 
-        javaMailSender.send(simpleMailMessage);
-    }
-
-    public void sendHtml(String html){
+    public void sendHtml(String html,String to, String subject){
         try{
 //        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         MimeMessage mail = javaMailSender.createMimeMessage();
@@ -46,13 +52,13 @@ public class EmailService {
 //        simpleMailMessage.setFrom("web.studio.eternity@gmail.com");
 //        simpleMailMessage.setSubject("subject");
 //        simpleMailMessage.setText("Text",true);
-            helper.setTo("sistimas001@gmail.com");
-            helper.setSubject("subject");
+            helper.setTo(to);
+            helper.setSubject(subject);
             helper.setText(html, true);
 
-            FileSystemResource file
-                    = new FileSystemResource(new File("F:\\загрузкиХрома2\\Article2.pdf"));
-            helper.addAttachment("Invoice.pdf", file);
+//            FileSystemResource file
+//                    = new FileSystemResource(new File("F:\\загрузкиХрома2\\Article2.pdf"));
+//            helper.addAttachment("Invoice.pdf", file);
 
             javaMailSender.send(mail);
 
@@ -60,6 +66,50 @@ public class EmailService {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void sendHtml(String html,String to, String subject, String fileDirectory, String fileName){
+        try{
+            MimeMessage mail = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mail, true);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(html, true);
+
+            FileSystemResource file
+                    = new FileSystemResource(new File(fileDirectory));
+            helper.addAttachment(fileName, file);
+
+            javaMailSender.send(mail);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+//    public void sendTemp(String html){
+//        try{
+////        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//            MimeMessage mail = javaMailSender.createMimeMessage();
+//            MimeMessageHelper helper = new MimeMessageHelper(mail, true);
+//            helper.setTo("sistimas001@gmail.com");
+//            helper.setSubject("subject");
+//            helper.setText(html, true);
+//
+//
+//            javaMailSender.send(mail);
+//
+//            //    javaMailSender.send(simpleMailMessage);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+
+    public void send(String to, String subject, String templateName, Context context) {
+        String body = templateEngine.process(templateName, context);
+        sendHtml(body,to,subject);
+        // return emailSender.sendHtml(to, subject, body);
     }
 //    @Autowired
 //    public JavaMailSenderImpl emailSender;
