@@ -111,6 +111,12 @@ public class EmailService {
         sendHtml(body,to,subject);
         // return emailSender.sendHtml(to, subject, body);
     }
+
+    public void send(String to, String subject, String templateName, Context context,String fileDirectory,String fileName) {
+        String body = templateEngine.process(templateName, context);
+        sendHtml(body,to,subject,fileDirectory,fileName);
+        // return emailSender.sendHtml(to, subject, body);
+    }
 //    @Autowired
 //    public JavaMailSenderImpl emailSender;
 

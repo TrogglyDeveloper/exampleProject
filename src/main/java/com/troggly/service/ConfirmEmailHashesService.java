@@ -42,7 +42,7 @@ public class ConfirmEmailHashesService extends GeneralServiceImp<ConfirmEmailHas
         confirmEmailHashes = confirmEmailHashesRepository.findByHash(hash);
         return confirmEmailHashes;
     }
-    public void sendConfirmEmail (User user) throws ConfirmExeprion{
+    public void sendConfirmEmail (User user) throws Exception{
         String rezultMessage = null;
      //   String userName, String subject, String hash, String emailAddress
         List<ConfirmEmailHashes> listHashes = confirmEmailHashesRepository.findAllByUser(user);
@@ -84,6 +84,8 @@ public class ConfirmEmailHashesService extends GeneralServiceImp<ConfirmEmailHas
 
             //  User user = userService.f
             // userEmail.setConfirm(true);
+        }else{
+            throw new ConfirmExeprion();
         }
 
 
