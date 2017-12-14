@@ -15,22 +15,42 @@ import com.troggly.repository.UserDetailsRepository;
 import com.troggly.repository.UserRepository;
 import com.troggly.service.ConfirmEmailHashesService;
 import com.troggly.service.UserService;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.context.Context;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
+import java.io.*;
 import java.util.*;
 
 /**
  * Created by Vlad on 26.07.2017.
  */
 @RestController
+@PropertySource("classpath:file-server.properties")
 public class UserController {
+
+    @Autowired
+    private Environment env;
+
+    @Autowired
+    private ServletContext servletContext;
+
     @Autowired
     private UserService userService;
     @Autowired
@@ -276,5 +296,88 @@ public class UserController {
             return mainReply;
         }
     }
+//    @ResponseBody
+//    @RequestMapping("/user/photo")
+//    public byte[] testphoto() throws IOException {
+//        InputStream in = servletContext.getResourceAsStream("F:\\asdf.png");
+//        return IOUtils.toByteArray(in);
+//    }
+
+//    @RequestMapping(value = "/user/photo", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
+//    public byte[] testphoto() throws IOException {
+//       // InputStream in = servletContext.get;
+////        BufferedReader br = new BufferedReader(new FileReader("F:\\asdf.png"));
+////        WritableRaster raster = bufferedImage .getRaster();
+////        DataBufferByte data   = (DataBufferByte) raster.getDataBuffer();
+//
+//        // open image
+//        File imgPath = new File("F:\\asdf.png");
+//        BufferedImage bufferedImage = ImageIO.read(imgPath);
+//
+//        // get DataBufferBytes from Raster
+//        WritableRaster raster = bufferedImage .getRaster();
+//        DataBufferByte data   = (DataBufferByte) raster.getDataBuffer();
+//        return data.getData();
+//    }
+
+
+
+
+//    @RequestMapping(value = "/sid", method = RequestMethod.GET,
+//            produces = MediaType.IMAGE_JPEG_VALUE)
+//    public ResponseEntity<InputStreamResource> getImage() throws IOException {
+//
+//     //   ClassPathResource imgFile = new ClassPathResource("temp/test.jpg");
+//       // ClassPathResource imgFile = new ClassPathResource("temp/test.jpg");
+//        File initialFile = new File("E:\\System64\\testFileInput.jpeg");
+//        InputStream targetStream = new FileInputStream(initialFile);
+//        return ResponseEntity
+//                .ok()
+//                .contentType(MediaType.IMAGE_JPEG)
+//                .body(new InputStreamResource(targetStream));
+//    }
+
+
+    @RequestMapping(value = "/file/public/image/{file:.+}", method = RequestMethod.GET,
+            produces = MediaType.ALL_VALUE)
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable String file) throws IOException {
+logger.info("FILE-NAME:"+file);
+        //   ClassPathResource imgFile = new ClassPathResource("temp/test.jpg");
+        // ClassPathResource imgFile = new ClassPathResource("temp/test.jpg");
+//        String fileName = "E:\\System64\\testFileInput.jpeg";
+//        String[] arr = fileName.split(".");
+//        logger.info(arr[arr.length-1]);
+
+        String fileName = env.getProperty("directory")+file;
+        String[] arr = file.split("\\.");
+//        System.out.println(arr.length);
+//        System.out.println(arr[arr.length-1]);
+
+
+        File initialFile = new File(fileName);
+
+        InputStream targetStream = new FileInputStream(initialFile);
+        if(arr[arr.length-1].equals("jpeg")||arr[arr.length-1].equals("jpg")){
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(new InputStreamResource(targetStream));
+        }
+        if(arr[arr.length-1].equals("png")){
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_PNG)
+                    .body(new InputStreamResource(targetStream));
+        }
+        if(arr[arr.length-1].equals("gif")){
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_GIF)
+                    .body(new InputStreamResource(targetStream));
+        }
+        return ResponseEntity
+                .notFound().build();
+    }
+
 
 }

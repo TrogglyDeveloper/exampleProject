@@ -25,7 +25,7 @@ import java.util.*;
  */
 @Service
 @PropertySource("classpath:foo.properties")
-@PropertySource("classpath:too.properties")
+@PropertySource("classpath:file-server.properties")
 public class BootstrapDefaultValue  implements InitializingBean {
     private static final Logger logger = LoggerFactory.getLogger(BootstrapDefaultValue.class);
 
@@ -172,11 +172,11 @@ public class BootstrapDefaultValue  implements InitializingBean {
     public Portfolio createTestPart(String text, String type){
         Image image1 = new Image();
         image1.setDate(new Date());
-        image1.setLink("http://localhost/testMainImage.jpg");
+        image1.setLink(env.getProperty("prefix")+"testMainImage.jpg");
         image1.setName("testName "+text);
         Image image2 = new Image();
         image2.setDate(new Date());
-        image2.setLink("http://localhost/713984bb31385c2d7a7b18979942916b.jpg");
+        image2.setLink("http://localhost:8080/file/public/image/testMainImage.jpg");
         image2.setName("testName "+text);
 
 

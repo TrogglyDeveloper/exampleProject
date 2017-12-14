@@ -141,6 +141,7 @@ public class PortfolioController {
             @RequestParam("mainImage") MultipartFile mainImage) {
 
         try{
+            logger.info("MAIN IMAGE NAME +"+mainImage.getOriginalFilename());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd");
             Date date = sdf.parse(stringDate);
             List<MultipartFile> fileList = new ArrayList<>();
