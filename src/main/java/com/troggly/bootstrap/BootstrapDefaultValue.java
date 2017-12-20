@@ -95,66 +95,12 @@ public class BootstrapDefaultValue  implements InitializingBean {
        // userDetailsRepository.save(userDetails);
         userRepository.save(user);
         logger.info("Added default users");
-//        user = null;
-//        user = userRepository.findOne("admin");
-//        logger.info(user.toString());
-//        ConfirmEmailHashes confirmEmailHashes = new ConfirmEmailHashes();
-//        for(UserEmail email:user.getUserDetails().getEmails()){
-//            if(email.isConfirm()==false)
-//        confirmEmailHashes.setEmail(email);
-//        }
-//        confirmEmailHashes.setUser(user);
-//        confirmEmailHashes.setHash("trololo625616841");
-//
-//        confirmEmailHashesService.save(confirmEmailHashes);
-
-//        UserApi userApi = new UserApi();
-//        userApi.login = "admin";
-//        userApi.date = new Date();
-//                List<String> roles = new ArrayList<>();
-//        roles.add(Role.ROLE_ADMIN.name());
-//        roles.add(Role.ROLE_MANAGER.name());
-//        roles.add(Role.ROLE_USER.name());
-//        userApi.roles = roles;
-//        userApi.type = Type.PRIVATE_PERSON.name();
-//        userApi.userDetails = null;
-//        User user = userMapper.toInternal(userApi);
-//        logger.info(user.toString());
-//     //   user.setPasswordHash("$2a$06$ptSH.gR7OB6tmo2yzX8.Cu1khpWmkGHSu/pGfCcRrV0NxO13H.WqG");
-//        userRepository.save(user);
-
     }
     private void createTestHash(){
 
     }
    private void createSimplePortfolio(){
-//        Image image1 = new Image();
-//        image1.setDate(new Date());
-//       image1.setLink("testLink1");
-//       image1.setName("testName1");
-//       Image image2 = new Image();
-//       image2.setDate(new Date());
-//       image2.setLink("testLink2");
-//       image2.setName("testName2");
-//
-//       Portfolio portfolio = new Portfolio();
-////       portfolio.setId(5555l);
-//       portfolio.setDescription("Quisque laoreet orci eu felis mollis accumsan. Praesent id augue sapien. Praesent eu hendrerit est. Quisque imperdiet lacus tincidunt ante imperdiet, aliquet luctus odio volutpat. Donec tincidunt elit non tellus bibendum, eget pharetra quam faucibus.");
-//       portfolio.setDate(new Date());
-//       portfolio.setProjectReference("testProjRef");
-//       portfolio.setTechnology("teh1,teh2");
-//       portfolio.setFullName("testFullName");
-//       portfolio.setDevelopmentTime("Two weeks");
-//       portfolio.setProjectType("project super type");
-//       portfolio.setMainImage(image1);
-//      //portfolioRepository.save(portfolio);
-////       portfolio.setId(new Random().nextLong());
-//       Set<Image> images = new HashSet<>();
-////       image1.setPortfolio(portfolio);
-////       image2.setPortfolio(portfolio);
-//       images.add(image1);
-//       images.add(image2);
-//      portfolio.setImages(images);
+
 
       for(int i = 0;i<5;i++){
           portfolioRepository.save(createTestPart(""+i,"Site"));
@@ -198,8 +144,6 @@ public class BootstrapDefaultValue  implements InitializingBean {
         portfolio.setDevelopmentTime("Two weeks");
         portfolio.setProjectType(type);
         portfolio.setMainImage(image1);
-        //portfolioRepository.save(portfolio);
-//       portfolio.setId(new Random().nextLong());
         Set<Image> images = new HashSet<>();
 //       image1.setPortfolio(portfolio);
 //       image2.setPortfolio(portfolio);

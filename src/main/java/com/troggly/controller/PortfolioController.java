@@ -38,13 +38,10 @@ public class PortfolioController {
     @RequestMapping(path = "/portfolio/getAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public PortfolioList getAllPortfolio() {
         PortfolioList portfolioList = new PortfolioList();
-//        portfolioList.portfolios = portfolioService.findAll();
         List<Portfolio> list = portfolioService.findAll();
         for(Portfolio portfolio : list){
             portfolioList.portfolios.add(portfolioMapper.fromInternal(portfolio));
         }
-        logger.info("SIZE List"+list.size());
-        logger.debug("SIZE List Po"+list.get(0).getImages().size());
         return portfolioList;
     }
 
@@ -72,24 +69,7 @@ public class PortfolioController {
         return projectTypes;
     }
 
-//    @RequestMapping(path = "/portfolio/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//    public PortfolioList addNewPortfolio(@RequestBody PortfolioReply portfolioReply) {
-//        PortfolioList portfolioList = null;
-//        try {
-//            logger.error("name "+portfolioReply.images.size());
-//            Portfolio portfolio = portfolioService.save(portfolioMapper.toInternal(portfolioReply));
-//            portfolioList = new PortfolioList();
-//            portfolioList.portfolios.add(portfolioMapper.fromInternal(portfolio));
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            portfolioList = new PortfolioList();
-//            portfolioList.returnedCode = -1;
-//            portfolioList.errorMessage = e.getMessage();
-//        }
-//
-//
-//        return portfolioList;
-//    }
+
 
 
     @RequestMapping(path="/portfolio/del/{portfolioId}",  method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -106,31 +86,7 @@ public class PortfolioController {
         return mainReply;
     }
 
-//    @RequestMapping(path="/portfolio/del/{portfolioId}",  method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//    public MainReply findByPortfolio(@PathVariable Long portfolioId ){
-//
-//    }
-// TODO findPortfolio
 
-   // @RequestMapping(path="/portfolio/file/",  method=RequestMethod.POST)
-//   @PostMapping("/portfolio/file/")
-//    public MainReply uploadFileMulti(
-//           @RequestParam("file") MultipartFile file) {
-//
-//           try{
-//               List<MultipartFile> list = new ArrayList<>();
-//               list.add(file);
-//               saveUploadedFiles(list);
-//               logger.error("file norm" + file.getOriginalFilename());
-//         }catch (Exception e){
-//               MainReply mainReply = new MainReply();
-//               mainReply.errorMessage = e.getMessage();
-//               mainReply.returnedCode = -1;
-//               return mainReply;
-//           }
-//
-//        return new MainReply();
-//    }
 
     @PostMapping("/portfolio/add")
     public MainReply addNewPortfolio(
@@ -175,53 +131,5 @@ public class PortfolioController {
 
         return new MainReply();
     }
-//    @PostMapping("/portfolio/files/")
-//    public MainReply uploadFileMultis(
-//            @ModelAttribute TestPortfolio portfolio) {
-//
-//        try{
-//            for (MultipartFile file: portfolio.images) {
-//                List<MultipartFile> list = new ArrayList<>();
-//                list.add(file);
-//                saveUploadedFiles(list);
-//                logger.error("file norm" + file.getOriginalFilename());
-//            }
-////            List<MultipartFile> list = new ArrayList<>();
-////            list.add(file);
-////            saveUploadedFiles(list);
-////            logger.error("file norm" + file.getOriginalFilename());
-//        }catch (Exception e){
-//            MainReply mainReply = new MainReply();
-//            mainReply.errorMessage = e.getMessage();
-//            mainReply.returnedCode = -1;
-//            return mainReply;
-//        }
-//
-//        return new MainReply();
-//    }
 
-//    private static String UPLOADED_FOLDER = "/home/vladyslav/Prog/";
-//
-//    private void saveUploadedFiles(List<MultipartFile> files) throws IOException {
-//
-//        for (MultipartFile file : files) {
-//
-//            if (file.isEmpty()) {
-//                continue; //next pls
-//            }
-//
-//            byte[] bytes = file.getBytes();
-//            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-//            Files.write(path, bytes);
-//
-//        }
-//}
-
-
-//    @GetMapping(value = "/image")
-//    public @ResponseBody byte[] getImage() throws IOException {
-//        InputStream in = getClass()
-//                .getResourceAsStream("/com/baeldung/produceimage/image.jpg");
-//        return IOUtils.toByteArray(in);
-//    }
 }

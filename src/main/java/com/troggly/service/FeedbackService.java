@@ -37,11 +37,6 @@ public class FeedbackService extends GeneralServiceImp<Feedback,Long> {
         Feedback feedbackReturn = null;
         String fileDirectory = null;
         String fileName = null;
-//        String welcomeFileName = "Private policy";
-//        String welcomeFileDirectory="D:/privacy-policy-template.pdf";//TODO properties
-
-      //  String fileUrl = "http://localhost/" + file.getOriginalFilename();//TODO fileserverAdress
-
         Feedback feedback = new Feedback();
         feedback.setEmail(email);
         feedback.setFullName(fullName);

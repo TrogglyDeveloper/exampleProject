@@ -33,36 +33,17 @@ public class EmailService {
     }
 
 
-//    public void send(){
-//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-//        simpleMailMessage.setTo("sistimas001@gmail.com");
-//        simpleMailMessage.setFrom("web.studio.eternity@gmail.com");
-//        simpleMailMessage.setSubject("subject");
-//        simpleMailMessage.setText("Text");
-//
-//        javaMailSender.send(simpleMailMessage);
-//    }
-
     public void sendHtml(String html,String to, String subject){
         try{
-//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         MimeMessage mail = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mail, true);
-//        simpleMailMessage.setTo("sistimas001@gmail.com");
-//        simpleMailMessage.setFrom("web.studio.eternity@gmail.com");
-//        simpleMailMessage.setSubject("subject");
-//        simpleMailMessage.setText("Text",true);
+
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(html, true);
 
-//            FileSystemResource file
-//                    = new FileSystemResource(new File("F:\\загрузкиХрома2\\Article2.pdf"));
-//            helper.addAttachment("Invoice.pdf", file);
-
             javaMailSender.send(mail);
 
-    //    javaMailSender.send(simpleMailMessage);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -88,23 +69,6 @@ public class EmailService {
     }
 
 
-//    public void sendTemp(String html){
-//        try{
-////        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-//            MimeMessage mail = javaMailSender.createMimeMessage();
-//            MimeMessageHelper helper = new MimeMessageHelper(mail, true);
-//            helper.setTo("sistimas001@gmail.com");
-//            helper.setSubject("subject");
-//            helper.setText(html, true);
-//
-//
-//            javaMailSender.send(mail);
-//
-//            //    javaMailSender.send(simpleMailMessage);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
 
     public void send(String to, String subject, String templateName, Context context) {
         String body = templateEngine.process(templateName, context);
@@ -117,15 +81,4 @@ public class EmailService {
         sendHtml(body,to,subject,fileDirectory,fileName);
         // return emailSender.sendHtml(to, subject, body);
     }
-//    @Autowired
-//    public JavaMailSenderImpl emailSender;
 
-//    public void sendSimpleMessage(String to, String subject, String text) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(to);
-//        message.setSubject(subject);
-//        message.setText(text);
-//        emailSender.send(message);
-//
-//    }
-}

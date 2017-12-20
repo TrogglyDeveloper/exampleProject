@@ -47,10 +47,6 @@ public class HazelcastConfiguration {
     @Bean
     public TemplateResolver templateResolver(){
         TemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        //templateResolver.setPrefix("templates/email/");
-       // templateResolver.setPrefix("temp/");
-       // templateResolver.setSuffix(".html");
-      //  templateResolver.setTemplateMode("HTML5");
         System.out.println("create:templateResolver");
         return templateResolver;
     }

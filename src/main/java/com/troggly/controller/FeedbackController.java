@@ -30,14 +30,6 @@ public class FeedbackController {
         try{
             feedbackService.addFeedback(file,fullName,email,message);
 
-//            List<MultipartFile> multipartFileList = new ArrayList<>();
-//            multipartFileList.add(file);
-//            fileService.saveUploadedFiles(multipartFileList);
-
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd");
-//            Date date = sdf.parse(stringDate);
-//            logger.info("FILE "+file.getOriginalFilename());
-//            logger.info("templates/email " +email);
         }catch (Exception e){
             MainReply mainReply = new MainReply();
             mainReply.errorMessage = e.getMessage();
@@ -49,27 +41,5 @@ public class FeedbackController {
 
         return new MainReply();
     }
-
-
-//    @PostMapping("/feedback/addObject")
-//    public MainReply addNewPortfolio(
-//            @ModelAttribute FeedbackApi feedbackApi) {
-//
-//        try{
-////            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd");
-////            Date date = sdf.parse(stringDate);
-//            logger.info("FILE "+feedbackApi.file.getOriginalFilename());
-//            logger.info("email "+feedbackApi.email);
-//        }catch (Exception e){
-//            MainReply mainReply = new MainReply();
-//            mainReply.errorMessage = e.getMessage();
-//            mainReply.returnedCode = -1;
-//            e.printStackTrace();
-//            return mainReply;
-//
-//        }
-//
-//        return new MainReply();
-//    }
 
 }

@@ -26,11 +26,6 @@ public class FileService {
     private static final Logger logger =  LoggerFactory.getLogger(FileService.class);
 
 
-//    private static String UPLOADED_FOLDER = "/home/vladyslav/Prog/";
-//      private static String UPLOADED_FOLDER = "F:\\";
-
-//    private static String UPLOADED_FOLDER =  ;
-
     public void saveUploadedFiles(List<MultipartFile> files) throws IOException {
 
         for (MultipartFile file : files) {
